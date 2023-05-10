@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import *
+from django.db.models import Q
+from django.core.paginator import Paginator
 
 
 def index(request):
@@ -17,11 +19,11 @@ def index(request):
     return render(request, "index.html", context)
 
 def cars(request):
-    all_cars = CarModel.objects.all()
-    context = {
-        'cars': all_cars
-    }
-    return render(request, "cars.html", context)
+    paginator = Paginator(CarModel.objects.all(), 2)
+    page_number = request.GET.get('page')
+    paged_cars = paginator.get_page(page_number)
+    return render(request, 'cars.html', context={'cars': paged_cars})
+
 
 def specific_car(request, car_id):
     car = Car.objects.get(car_id=car_id)
@@ -37,11 +39,28 @@ def services(request):
     return render(request, "services.html", context)
 
 def orders(request):
-    all_orders = OrderList.objects.all()
-    context = {
-        'orders': all_orders
-    }
-    return render(request, 'orders.html', context)
+    paginator = Paginator(OrderList.objects.all(), 1)
+    page_number = request.GET.get('page')
+    paged_orders = paginator.get_page(page_number)
+    return render(request, 'orders.html', context={'orders': paged_orders})
 
-def specific_order(request, order_id):
-    pass
+
+def specific_order(request, order_list_id):
+    order_list = get_object_or_404(OrderList, pk=order_list_id)
+    orders_of_order_list = Order.objects.filter(Q(order_list_id__exact=order_list_id))
+    context = {'order_list': order_list, 'orders': orders_of_order_list}
+    return render(request, 'specific_order.html', context)
+
+
+def search(request):
+    """
+    paprasta paieška. query ima informaciją iš paieškos laukelio,
+    search_results prafiltruoja pagal įvestą automobilio modeli ir savininka.
+    Icontains nuo contains skiriasi tuo, kad icontains ignoruoja ar raidės
+    didžiosios/mažosios.
+    """
+    query = request.GET.get('query')
+    search_results = Car.objects.filter(Q(car_model__car_model__icontains=query) | Q(client__icontains=query) |
+                                         Q(plate_no__icontains=query) | Q(vin_number__icontains=query)
+                                        | Q(car_model__brand__icontains=query))
+    return render(request, 'search.html', {'cars': search_results, 'query': query})

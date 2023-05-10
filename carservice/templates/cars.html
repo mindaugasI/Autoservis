@@ -1,9 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% load static %}
   <h1>Cars</h1>
   <p>The list of cars:</p>
     {% for car in cars %}
-      <li><a href="{% url 'specific_car' car.car_model_id %}">{{car.brand}} {{car.car_model}} {{ car.engine }} - {{ car.client }}</a></li>
+        <div class="col-md-4 d-flex align-items-stretch">
+          <div class="card mb-4 shadow-sm">
+            {% if car.photo %}
+              <img src="{{ car.photo.url }}" class="card-img-top car-photo" alt="...">
+            {% else %}
+              <img src="{% static 'media/photos/no-image.png' %}" class="card-img-top car-photo">
+            {% endif %}
+            <div class="card-body">
+              <h6 class="card-subtitle mb-2 text-muted">{{ car.model }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">{{ car.plate_no }}</h6>
+              <p class="card-text"><a href="{{ car.car_model }}">{{ car.client }}</a></p>
+            </div>
+          </div>
+         </div>
     {% endfor %}
+
+<div class="container pages">
+    <nav aria-label="...">
+        {% if cars.has_other_pages %}
+            <ul class="pagination pagination-sm justify-content-end">
+                {% for i in cars.paginator.page_range %}
+                    {% if cars.number == i %}
+                        <li class="page-item active">
+                            <a class="page-link">{{ i }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </nav>
+</div>
+
 {% endblock %}

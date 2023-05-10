@@ -22,6 +22,7 @@ class Car(models.Model):
     plate_no = models.CharField(max_length=20)
     vin_number = models.CharField(max_length=17)
     client = models.CharField(max_length=100)
+    photo = models.ImageField('Photo', upload_to='car_photos', null=True)
 
     def __str__(self):
         return f"{self.client} - {self.car_model} - {self.plate_no} - {self.vin_number}"
@@ -55,11 +56,15 @@ class ServicePrice(models.Model):
         verbose_name = 'Service price'
         verbose_name_plural = 'Service prices'
 
+<<<<<<< HEAD
+class OrderList(models.Model):
+=======
 
 # Uzsakymas
 class OrderList(models.Model):
     """Order list which is connected to an order. Representing the visit to an autoservice shop
     and the total order place"""
+>>>>>>> 7211486ff028c2355969fff4557358f39cd6a75b
     order_list_id = models.AutoField(primary_key=True)
     order_date = models.DateTimeField(default=timezone.now)
     car = models.ForeignKey(Car, on_delete=models.SET_NULL, null=True)
@@ -67,6 +72,8 @@ class OrderList(models.Model):
 
     def __str__(self):
         return f"{self.car} - {self.order_date} - {self.total_price}"
+<<<<<<< HEAD
+=======
 
     class Meta:
         verbose_name = 'Order list'
@@ -84,19 +91,35 @@ class Order(models.Model):
 
     def __str__(self):
         return f"{self.order_list_id} - {self.service} - {self.quantity} - {self.price}"
+>>>>>>> 7211486ff028c2355969fff4557358f39cd6a75b
 
     class Meta:
-        verbose_name = 'Order'
-        verbose_name_plural = 'Orders'
+        verbose_name = 'Order List'
+        verbose_name_plural = 'Order Lists'
 
 
+<<<<<<< HEAD
+
+class Order(models.Model):
+    order_id = models.AutoField(primary_key=True)
+    order_list_id = models.ForeignKey(OrderList, on_delete=models.SET_NULL, null=True)
+=======
 class OrderList(models.Model):
     order_list_id = models.AutoField(primary_key=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
+>>>>>>> 7211486ff028c2355969fff4557358f39cd6a75b
     service = models.ForeignKey(Service, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField()
     price = models.FloatField()
 
     def __str__(self):
+<<<<<<< HEAD
+        return f"{self.order_list_id} - {self.service} - {self.quantity} - {self.price}"
+
+    class Meta:
+        verbose_name = 'Order'
+        verbose_name_plural = 'Orders'
+=======
         return f"{self.service} - {self.quantity} - {self.price}"
+>>>>>>> 7211486ff028c2355969fff4557358f39cd6a75b
 
