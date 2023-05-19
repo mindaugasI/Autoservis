@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
+
 {% block content %}
+{% load static %}
+
+{% if order_list.car.car_model.photo %}
+    <img src="{{ order_list.car.car_model.photo.url }}" class="card-img-top car-photo" alt="...">
+{% else %}
+    <img src="{% static 'media/car_photos/no-image.png' %}" class="card-img-top car-photo">
+{% endif %}
+
 <h1>Order List for {{order_list.car.client}}</h1>
 <h4><b>Order done at:</b> {{order_list.order_date}}</h4>
 <h4><b>Car model:</b> {{order_list.car.car_model}}</h4>
@@ -13,4 +22,5 @@
     <li>{{ order.service }} / {{ order.quantity }} / {{ order.price }}</li>
     {% endfor %}
 </ul>
+
 {% endblock %}
