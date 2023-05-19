@@ -22,10 +22,10 @@ from django.views.generic.base import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('carservice.urls')),
-    path('', RedirectView.as_view(url='carservice/', permanent=True)),
+    path('carservice/', include('carservice.urls')),
+    path('', RedirectView.as_view(url='carservice/', permanent=False)),
     ] + (static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) +
-        static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
+         static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
 
 
 
