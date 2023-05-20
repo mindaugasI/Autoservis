@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django_resized import ResizedImageField
 
 
 class CarModel(models.Model):
@@ -8,7 +9,8 @@ class CarModel(models.Model):
     car_model = models.CharField('Car model', max_length=100)
     year = models.DateField("Made on:", null=True)
     engine = models.CharField(max_length=100)
-    photo = models.ImageField('Photo', upload_to='car_photos', null=True, blank=True)
+#    photo = models.ImageField('Photo', upload_to='car_photos', null=True, blank=True)
+    photo = ResizedImageField('Photo', size=[300, 400], upload_to='car_photos', null=True)
 
     def __str__(self):
         return f"{self.brand} - {self.car_model}"
