@@ -33,15 +33,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # MY APPS
+    'carservice',
+    # BASIC APPS
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # MY APPS
-    'carservice',
-
 ]
 
 MIDDLEWARE = [
@@ -132,3 +132,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # media folder settings
 MEDIA_ROOT = os.path.join(BASE_DIR, 'carservice/static/media')
 MEDIA_URL = '/media/'
+
+LOGIN_REDIRECT_URL = '/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_POST = 587
+EMAIL_USE_TLS = True
+# email from which it will be sent
+EMAIL_HOST_USER = config('EMAIL_ADDRESS')
+# password
+EMAIL_HOST_PASSWORD = config('EMAIL_PASS')
+
